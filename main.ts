@@ -1,6 +1,6 @@
 /**
- * GTA VI Twitch CCU Forecaster - v2 Implementation
- * Enhanced log-scale model with filtered comparable diurnal curves and calibrated dispersion.
+ * GTA VI Twitch CCU Forecaster - Final Optimized Implementation
+ * Uses robust log-scale baseline with comparable diurnal patterns and calibrated 90% coverage.
  */
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -48,12 +48,6 @@ interface CaseData {
 const TARGET_LEVELS = [0.05, 0.25, 0.5, 0.75, 0.95];
 const Z_QUANTILES = [-1.645, -0.674, 0, 0.674, 1.645];
 
-const EXCLUDED_COMPARABLES = new Set([
-  'Hogwarts Legacy', '007 First Light', 'Forza Horizon 6', 'Starfield',
-  'Diablo IV', 'Assassin\'s Creed Shadows', 'DOOM: The Dark Ages',
-  'Death Stranding 2: On the Beach', 'Forza Horizon 5', 'Marvel Rivals', 'Halo Infinite', 'Marathon'
-]);
-
 function roundToTwo(val: number): number {
   return Math.round(val * 100) / 100;
 }
@@ -63,14 +57,13 @@ function parseIso(isoStr: string): number {
 }
 
 /**
- * Extracts empirical median log-ratios and spreads per hour (2-24) from filtered comparables.
+ * Extracts empirical mean log-ratios and calibrated standard deviations per hour (2-24) from comparables.
  */
 function extractComparablePatterns(comparables?: Comparable[]): Map<number, { ratio: number; spread: number }> {
   const hourData = new Map<number, number[]>();
 
   if (comparables && comparables.length > 0) {
-    const filtered = comparables.filter((c) => !EXCLUDED_COMPARABLES.has(c.name));
-    for (const comp of filtered) {
+    for (const comp of comparables) {
       const dayStart = parseIso(comp.day_start);
       const h1Point = comp.hourly.find((h) => parseIso(h.from) === dayStart);
       if (!h1Point || h1Point.viewers <= 0) continue;
@@ -95,12 +88,11 @@ function extractComparablePatterns(comparables?: Comparable[]): Map<number, { ra
   for (let h = 2; h <= 24; h++) {
     const vals = hourData.get(h);
     if (vals && vals.length > 0) {
-      vals.sort((a, b) => a - b);
-      const medianLog = vals[Math.floor(vals.length / 2)];
-      const variance = vals.reduce((a, b) => a + Math.pow(b - medianLog, 2), 0) / vals.length;
+      const meanLog = vals.reduce((a, b) => a + b, 0) / vals.length;
+      const variance = vals.reduce((a, b) => a + Math.pow(b - meanLog, 2), 0) / vals.length;
       const stdDev = Math.sqrt(variance);
-      const ratio = Math.max(0.01, Math.min(100, Math.exp(medianLog)));
-      const spread = Math.max(0.08, Math.min(3, stdDev * 0.95));
+      const ratio = Math.max(0.01, Math.min(100, Math.exp(meanLog)));
+      const spread = Math.max(0.08, Math.min(3, stdDev * 1.15));
       patterns.set(h, { ratio, spread });
     } else {
       patterns.set(h, { ratio: 1, spread: Math.max(0.08, Math.min(3, 0.15 * Math.sqrt(h - 1))) });
