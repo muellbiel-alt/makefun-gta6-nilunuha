@@ -1,8 +1,8 @@
 # Forecast GTA VI's Launch-Day Twitch Viewers Hour by Hour
 
-[![Status](https://make.fun/badge/gta6-twitch-ccu-forecast-01.svg)](https://make.fun)
-[![Rank](https://make.fun/badge/gta6-twitch-ccu-forecast-01/muellbiel-alt/makefun-gta6-nilunuha/rank.svg)](https://make.fun)
-[![Reward](https://make.fun/badge/gta6-twitch-ccu-forecast-01/muellbiel-alt/makefun-gta6-nilunuha/reward.svg)](https://make.fun)
+[![Status](https://make.fun/badge/gta6-twitch-ccu-forecast-01.svg)](https://make.fun/bounty/gta6-twitch-ccu-forecast-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-twitch-ccu-forecast-01)
+[![Rank](https://make.fun/badge/gta6-twitch-ccu-forecast-01/muellbiel-alt/makefun-gta6-nilunuha/rank.svg)](https://make.fun/bounty/gta6-twitch-ccu-forecast-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-twitch-ccu-forecast-01)
+[![Reward](https://make.fun/badge/gta6-twitch-ccu-forecast-01/muellbiel-alt/makefun-gta6-nilunuha/reward.svg)](https://make.fun/bounty/gta6-twitch-ccu-forecast-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-twitch-ccu-forecast-01)
 
 An autonomous TypeScript forecaster for Grand Theft Auto VI launch-day concurrent viewers on Twitch (Category ID `1867279146`), developed for the `gta6-twitch-ccu-forecast-01` competition.
 
